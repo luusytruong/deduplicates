@@ -6,7 +6,7 @@
     box-sizing: border-box;
     list-style: none;
     line-height: 1.5;
-    font-size: 14px;
+    font-size: 12px;
     font-family: 'Inter';
     font-weight: normal;
     text-decoration: none;
@@ -14,6 +14,7 @@
     -moz-user-select: text !important;
     -webkit-user-select: text !important;
     outline: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 :root {
@@ -32,23 +33,51 @@ body {
     background-color: #F3F5F6;
 }
 
-@keyframes toastShow {
+body {
+    background: linear-gradient(45deg,
+            #f1f5f6,
+            #f1f5f6,
+            #7a6bff80,
+            #f1f5f6,
+            #0081ff80,
+            #f1f5f6,
+            #f1f5f6);
+    background-size: 1000% 1000%;
+    background-repeat: no-repeat;
+    animation: gradient 60s ease-in-out infinite;
+}
+
+@keyframes gradient {
     0% {
-        transform: translate(-50%, 100%);
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
     }
 
     100% {
-        transform: translate(-50%, calc(var(--padding-s) * -1));
+        background-position: 0% 50%
+    }
+}
+
+@keyframes toastShow {
+    0% {
+        transform: translate(-50%, -100%);
+    }
+
+    100% {
+        transform: translate(-50%, calc(var(--padding-s)));
     }
 }
 
 @keyframes toastHide {
     0% {
-        transform: translate(-50%, calc(var(--padding-s) * -1));
+        transform: translate(-50%, calc(var(--padding-s)));
     }
 
     100% {
-        transform: translate(-50%, 100%);
+        transform: translate(-50%, -100%);
     }
 }
 
@@ -77,19 +106,34 @@ body {
 }
 
 #toast {
-    position: fixed;
+    position: absolute;
     left: 50%;
-    bottom: 0;
-    transform: translate(-50%, 0);
-    background-color: #FFF;
-    padding: var(--padding-s);
-    padding-right: var(--padding-l);
-    border-radius: 12px;
-    box-shadow: 0 0 40px #00000020;
+    top: 0;
     display: flex;
     align-items: center;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, -100%);
     z-index: 100;
+    padding: 16px;
+    justify-content: center;
+    width: 100%;
+}
+
+.toast-wrapper:hover {
+    box-shadow: 0 0 40px #00000020;
+}
+
+.toast-wrapper {
+    display: flex;
+    align-items: center;
+    max-width: 370px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    padding: var(--padding-s);
+    padding-right: var(--padding-l);
+    border-radius: 20px;
+    transition: 0.35s all;
+    box-shadow: 0 0 40px #00000010;
 }
 
 .toast-icon {
@@ -106,15 +150,15 @@ body {
     flex-direction: column;
 }
 
-.toast-title {
-    font-weight: 600;
+.toast-body>* {
     user-select: none !important;
 }
 
-.toast-content {
-    white-space: nowrap;
-    user-select: none !important;
+.toast-title {
+    font-weight: 600;
 }
+
+/* .toast-content {} */
 
 .wrapper {
     height: 100%;
@@ -131,13 +175,18 @@ body {
     flex-direction: column;
     text-align: center;
     width: 100%;
-    max-width: 420px;
-    padding: 12px;
+    max-width: 370px;
+    padding: var(--padding-m);
     border-radius: 20px;
-    background-color: #FFF;
-    box-shadow: 0 0 10px #00000010;
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
     overflow: hidden;
-    transition: all 1s;
+    transition: all 0.35s;
+    box-shadow: 0 0 40px #0000000d;
+}
+
+.process:hover {
+    box-shadow: 0 0 40px #0000001a;
 }
 
 .process>* {
@@ -145,13 +194,13 @@ body {
 }
 
 h1 {
-    margin: 16px 0 !important;
+    margin: 16px 0 32px 0 !important;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 h1 a {
-    font-size: 16px;
+    font-size: 14px;
     color: #7A6BFF;
 }
 
@@ -159,9 +208,11 @@ h1 a {
     height: 200px;
     padding: 6px;
     resize: none;
-    border: 1px solid #7A6BFF1A;
+    /* border: 1px solid #f3f5f6; */
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 0;
+    box-shadow: inset 0 0 6px #0000000d;
     border-radius: 6px;
-    font-size: 12px;
 }
 
 #input-text {
@@ -174,10 +225,10 @@ h1 a {
 }
 
 .process>div {
-    margin-left: -12px;
-    margin-right: -12px;
-    margin-bottom: -12px;
-    border-top: 1px solid #7A6BFF1A;
+    margin-left: calc(var(--padding-m) * -1);
+    margin-right: calc(var(--padding-m) * -1);
+    margin-bottom: calc(var(--padding-m) * -1);
+    border-top: 1px solid #55555514;
     display: flex;
 }
 
@@ -186,7 +237,7 @@ h1 a {
     background-color: transparent;
     border: 0;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     color: #7A6BFF;
     flex: 1;
     user-select: none !important;
@@ -194,7 +245,7 @@ h1 a {
 }
 
 .process>div>button {
-    border-right: 1px solid #7A6BFF1A;
+    border-right: 1px solid #55555514;
 }
 
 .process>div>:last-child {
