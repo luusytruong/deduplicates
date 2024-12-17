@@ -2,7 +2,6 @@ const { Document, Packer, Paragraph, TextRun } = docx;
 const inputField = document.getElementById("input-text");
 const btnStart = document.getElementById("btn-start");
 const btnSwitch = document.getElementById("btn-switch");
-
 //process text form input
 function process() {
   try {
@@ -12,7 +11,6 @@ function process() {
     let questionText = "";
     const labelAnswers = ["A.", "B.", "C.", "D."];
     let options = [];
-
     if (text !== "") {
       const lines = text.trim().split("\n");
 
@@ -46,30 +44,13 @@ function process() {
         });
       }
       if (arr.length) {
-        generateDoc(removeDuplicates(arr));
+        generateDoc(arr);
+        return;
       }
       toast("Error", "No question found");
     } else {
       toast("Error", "You must enter questions");
     }
-  } catch (e) {
-    toast("Error", e);
-  }
-}
-//remove duplicate in arr
-function removeDuplicates(arr) {
-  try {
-    let uniqueQuestions = new Set();
-    let uniqueArr = [];
-
-    arr.forEach((question) => {
-      if (!uniqueQuestions.has(question.content)) {
-        uniqueQuestions.add(question.content);
-        uniqueArr.push(question);
-      }
-    });
-
-    return uniqueArr;
   } catch (e) {
     toast("Error", e);
   }
@@ -85,6 +66,12 @@ function generateDoc(arr) {
     const sectionChildren = [];
     let size = 24;
     let font = "Calibri";
+    const questionCount = {};
+
+    arr.forEach((question) => {
+      questionCount[question.content] =
+        (questionCount[question.content] || 0) + 1;
+    });
 
     arr.forEach((question, index) => {
       const labelParagraph = new Paragraph({
@@ -97,11 +84,14 @@ function generateDoc(arr) {
         ],
       });
 
+      const isDuplicate = questionCount[question.content] > 1;
+
       const questionParagraph = new Paragraph({
         children: [
           new TextRun({
             text: question.content,
             bold: true,
+            color: isDuplicate ? "#FF4500" : undefined,
             size: size,
             font: font,
           }),
@@ -143,7 +133,6 @@ function generateDoc(arr) {
     toast("Error", e);
   }
 }
-
 //toast
 let timeoutId;
 function toast(status, content) {
@@ -225,6 +214,6 @@ btnStart.addEventListener("click", () => {
 });
 //listener event click
 btnSwitch.addEventListener("click", () => {
-  window.location.href = "/highlight/";
+  window.location.href = "../";
 });
 console.log(getDateTime("date"), getDateTime());
