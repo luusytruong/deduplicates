@@ -1,8 +1,8 @@
-const { Document, Packer, Paragraph, TextRun } = docx;
 const inputField = document.getElementById("input-text");
 const btnStart = document.getElementById("btn-start");
 const btnSwitch = document.getElementById("btn-switch");
-
+//
+const cleanedText = (text) => text.replace(/^\*[A-D]\.\s*/, "");
 //process text form input
 function process() {
   try {
@@ -10,8 +10,7 @@ function process() {
     let arr = [];
     let nextIsQuestion = false;
     let questionText = "";
-    const labelAnswers = ["A.", "B.", "C.", "D."];
-    let options = [];
+    let correctAnswer = "";
 
     if (text !== "") {
       const lines = text.trim().split("\n");
@@ -23,17 +22,17 @@ function process() {
             if (questionText !== "") {
               arr.push({
                 content: questionText,
-                options: options,
+                correctAnswer: correctAnswer,
               });
-              options = [];
+              correctAnswer = "";
             }
             nextIsQuestion = true;
           } else if (nextIsQuestion) {
             nextIsQuestion = false;
             questionText = line;
           } else {
-            if (labelAnswers.some((label) => line.includes(label))) {
-              options.push(line);
+            if (line.includes("*")) {
+              correctAnswer = cleanedText(line).trim();
             }
           }
         }
@@ -42,104 +41,29 @@ function process() {
       if (questionText !== "") {
         arr.push({
           content: questionText,
-          options: options,
+          correctAnswer: correctAnswer,
         });
       }
       if (arr.length) {
-        generateDoc(removeDuplicates(arr));
+        // arr.forEach((q, index) => {
+        //   console.log(index + 1 + q.correctAnswer);
+        // });
+        const jsonArr = JSON.stringify(arr, null, 2);
+
+        navigator.clipboard
+          .writeText(jsonArr)
+          .then(() => {
+            toast("Successful", `${arr.length} Question copied to clipboard`);
+          })
+          .catch((err) => {
+            toast("Error", err);
+          });
         return;
       }
       toast("Error", "No question found");
     } else {
       toast("Error", "You must enter questions");
     }
-  } catch (e) {
-    toast("Error", e);
-  }
-}
-//remove duplicate in arr
-function removeDuplicates(arr) {
-  try {
-    let uniqueQuestions = new Set();
-    let uniqueArr = [];
-
-    arr.forEach((question) => {
-      if (!uniqueQuestions.has(question.content)) {
-        uniqueQuestions.add(question.content);
-        uniqueArr.push(question);
-      }
-    });
-
-    return uniqueArr;
-  } catch (e) {
-    toast("Error", e);
-  }
-}
-//generator docx
-function generateDoc(arr) {
-  try {
-    const doc = new Document({
-      creator: "luu sy truong",
-      sections: [],
-    });
-
-    const sectionChildren = [];
-    let size = 24;
-    let font = "Calibri";
-
-    arr.forEach((question, index) => {
-      const labelParagraph = new Paragraph({
-        children: [
-          new TextRun({
-            text: `Question ${index + 1}`,
-            size: size,
-            font: font,
-          }),
-        ],
-      });
-
-      const questionParagraph = new Paragraph({
-        children: [
-          new TextRun({
-            text: question.content,
-            bold: true,
-            size: size,
-            font: font,
-          }),
-        ],
-      });
-
-      sectionChildren.push(labelParagraph, questionParagraph);
-
-      question.options.forEach((option) => {
-        const optionParagraph = new Paragraph({
-          children: [
-            new TextRun({
-              text: option.includes("*") ? option : option,
-              bold: option.includes("*"),
-              color: option.includes("*") ? "00BB00" : undefined,
-              size: size,
-              font: font,
-            }),
-          ],
-        });
-        sectionChildren.push(optionParagraph);
-      });
-      //add break point
-      sectionChildren.push(new Paragraph({ text: "" }));
-    });
-    //add arr to doc
-    doc.addSection({
-      children: sectionChildren,
-    });
-    //save to pc
-    Packer.toBlob(doc).then((blob) => {
-      saveAs(
-        blob,
-        `questions-${getDateTime("date") + "_" + getDateTime()}.docx`
-      );
-      toast("Successful", "File is downloading");
-    });
   } catch (e) {
     toast("Error", e);
   }
@@ -226,6 +150,6 @@ btnStart.addEventListener("click", () => {
 });
 //listener event click
 btnSwitch.addEventListener("click", () => {
-  window.location.href = "./highlight/";
+  window.location.href = "../";
 });
 console.log(getDateTime("date"), getDateTime());
