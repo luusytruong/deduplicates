@@ -226,6 +226,6 @@ btnStart.addEventListener("click", () => {
 });
 //listener event click
 btnSwitch.addEventListener("click", () => {
-  window.location.href = "./highlight/";
+  window.location.href = "./only/";
 });
 console.log(getDateTime("date"), getDateTime());
