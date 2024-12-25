@@ -200,6 +200,8 @@ inputField.addEventListener("click", async () => {
   const copyText = (await navigator.clipboard.readText()).trim();
   if (copyText !== "") {
     inputField.value = copyText;
+  } else {
+    toast("Warning", "Clipboard empty");
   }
 });
 //listener event click
