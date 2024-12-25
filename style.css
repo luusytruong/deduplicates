@@ -89,6 +89,10 @@ body {
     animation: toastHide .8s ease forwards;
 }
 
+#toast.warning.animate {
+    animation: toastHide .8s ease forwards;
+}
+
 #toast.successful {
     animation: toastShow .8s ease forwards;
 
@@ -105,6 +109,15 @@ body {
     }
 }
 
+#toast.warning {
+    animation: toastShow .8s ease forwards;
+
+    svg {
+        fill: #FFA500;
+        margin-left: 12px;
+    }
+}
+
 #toast {
     position: absolute;
     left: 50%;
@@ -118,16 +131,12 @@ body {
     width: 100%;
 }
 
-.toast-wrapper:hover {
-    box-shadow: 0 0 40px #00000020;
-}
-
 .toast-wrapper {
     display: flex;
     align-items: center;
     max-width: 370px;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 1);
     backdrop-filter: blur(20px);
     padding: var(--padding-s);
     padding-right: var(--padding-l);
@@ -209,6 +218,7 @@ h1 a {
     border: 0;
     box-shadow: inset 0 0 6px #0000000d;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 #input-text {
