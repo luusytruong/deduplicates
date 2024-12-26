@@ -6,7 +6,7 @@ const btnSwitch = document.getElementById("btn-switch");
 //process text form input
 function process() {
   try {
-    const text = document.getElementById("input-text").value;
+    const text = inputField.value;
     let arr = [];
     let nextIsQuestion = false;
     let questionText = "";
@@ -50,6 +50,7 @@ function process() {
         return;
       }
       toast("Warning", "No question found");
+      inputField.value = ''
     } else {
       toast("Error", "You must enter questions");
     }

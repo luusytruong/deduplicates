@@ -6,6 +6,7 @@
     box-sizing: border-box;
     list-style: none;
     line-height: 1.5;
+    color: #333;
     font-size: 12px;
     font-family: 'Inter';
     font-weight: normal;
@@ -37,9 +38,9 @@ body {
     background: linear-gradient(45deg,
             #f1f5f6,
             #f1f5f6,
-            #7a6bff80,
+            #7a6bff,
             #f1f5f6,
-            #0081ff80,
+            #0081ff,
             #f1f5f6,
             #f1f5f6);
     background-size: 1000% 1000%;
@@ -134,7 +135,7 @@ body {
 .toast-wrapper {
     display: flex;
     align-items: center;
-    max-width: 370px;
+    max-width: 320px;
     width: 100%;
     background-color: rgba(255, 255, 255, 1);
     backdrop-filter: blur(20px);
@@ -167,8 +168,6 @@ body {
     font-weight: 600;
 }
 
-/* .toast-content {} */
-
 .wrapper {
     height: 100%;
     max-width: 1200px;
@@ -184,22 +183,24 @@ body {
     flex-direction: column;
     text-align: center;
     width: 100%;
-    max-width: 370px;
-    padding: var(--padding-m);
+    max-width: 320px;
+    aspect-ratio: 1;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 1);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
     overflow: hidden;
     transition: all 0.35s;
     box-shadow: 0 0 40px #0000000d;
 }
 
 .process>* {
-    margin-bottom: 12px;
+    margin: var(--margin-s);
 }
-
+.process>:last-child{
+    margin: 0;
+}
 h1 {
-    /* margin: 16px 0 32px 0 !important; */
+    margin-bottom: calc(var(--margin-s) / 2) !important;
     font-weight: 500;
     font-size: 14px;
 }
@@ -210,11 +211,12 @@ h1 a {
 }
 
 #input-text {
-    height: 200px;
+    margin-top: calc(var(--margin-s) / 2) !important;
+    flex: 1;
     padding: 6px;
     resize: none;
     /* border: 1px solid #f3f5f6; */
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 1);
     border: 0;
     box-shadow: inset 0 0 6px #0000000d;
     border-radius: 6px;
@@ -231,9 +233,6 @@ h1 a {
 }
 
 .process>div {
-    margin-left: calc(var(--padding-m) * -1);
-    margin-right: calc(var(--padding-m) * -1);
-    margin-bottom: calc(var(--padding-m) * -1);
     /* border-top: 1px solid #55555514; */
     display: flex;
 }
@@ -248,14 +247,6 @@ h1 a {
     flex: 1;
     user-select: none !important;
     transition: all .15s;
-}
-
-.process>div>button {
-    /* border-right: 1px solid #55555514; */
-}
-
-.process>div>:last-child {
-    border: 0;
 }
 
 #btn-start {

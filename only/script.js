@@ -6,7 +6,6 @@ const cleanedText = (text) => text.replace(/^\*[A-D]\.\s*/, "");
 //process text form input
 function process() {
   try {
-    const inputField = document.getElementById("input-text");
     const text = inputField.value;
     let arr = [];
     let nextIsQuestion = false;
@@ -64,6 +63,7 @@ function process() {
         return;
       }
       toast("Warning", "No question found");
+      inputField.value = ''
     } else {
       toast("Error", "You must enter questions");
     }
