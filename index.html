@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="shortcut icon" href="/icons/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="./icons/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
     <meta name="google" content="notranslate" />
     <meta charset="UTF-8" />
@@ -32,11 +32,13 @@
           <a href="https://fb.com/lst24" target="_blank">@syluu</a>
           Deduplication
         </h1>
-        <textarea
-          id="input-text"
-          placeholder="Click to paste question"
-          readonly
-        ></textarea>
+        <div class="input-area">
+          <button id="btn-paste"><img src="./icons/paste-regular.svg" alt="p" /></button>
+          <textarea
+            id="input-text"
+            placeholder="Paste question"
+          ></textarea>
+        </div>
         <div>
           <button id="btn-switch">Switch</button>
           <button id="btn-start">Process</button>

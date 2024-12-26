@@ -50,7 +50,7 @@ function process() {
         return;
       }
       toast("Warning", "No question found");
-      inputField.value = ''
+      inputField.value = "";
     } else {
       toast("Error", "You must enter questions");
     }
@@ -197,10 +197,11 @@ function getDateTime(option) {
   }
 }
 //listener event click
-inputField.addEventListener("click", async () => {
+const bP = document.getElementById("btn-paste");
+bP.addEventListener("click", async () => {
   const copyText = (await navigator.clipboard.readText()).trim();
   if (copyText !== "") {
-    inputField.value = copyText;
+    inputField.value += copyText + "\n";
   } else {
     toast("Warning", "Clipboard empty");
   }
