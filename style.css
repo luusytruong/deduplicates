@@ -35,6 +35,24 @@
     color: #F3F5F6;
 }
 
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7a6bffbb;
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    cursor: default;
+}
+
 body {
     height: 100svh;
     background-color: #F3F5F6;
@@ -205,16 +223,17 @@ a {
     border: 0;
     box-shadow: inset 0 0 6px #0000000d;
     border-radius: 6px;
+    caret-color: #7A6BFF;
 }
 
-#input-text {
+/* #input-text {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
 #input-text::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .process>div {
     display: flex;
@@ -224,9 +243,6 @@ a {
     flex: 1;
     margin-top: calc(var(--margin-s) / 2) !important;
     position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    caret-color: #7A6BFF;
 }
 
 .process>div>button {
@@ -243,18 +259,22 @@ a {
 
 .input-area>button {
     padding: calc(var(--padding-s) / 2) !important;
+    margin-right: 4px;
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 1;
+    /* z-index: 1; */
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 0 8px;
-    /* box-shadow: 0 0 10px #0000000d; */
-    /* background-color: #FFFFFF !important; */
 }
-
+.input-area>button:hover{
+    opacity: 0.4;
+}
+.input-area>button:active{
+    opacity: 1;
+}
 .input-area img {
     user-select: none !important;
     width: 14px;
@@ -265,10 +285,10 @@ a {
     font-weight: 600;
 }
 
-.process>div>button:hover {
+.process>div:last-child>button:hover {
     background-color: rgb(122, 107, 255, 0.05);
 }
 
-.process>div>button:active {
+.process>div:last-child>button:active {
     background-color: rgb(122, 107, 255, 0.1);
 }
