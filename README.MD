@@ -14,11 +14,11 @@ This tool is designed to filter out duplicate questions and extract only the cor
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/luusytruong/process-lms.git
+    git clone https://github.com/luusytruong/deduplicates.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd process-lms
+    cd deduplicates
     ```
 3. Open with Visual Studio Code:
     ```sh
@@ -27,7 +27,7 @@ This tool is designed to filter out duplicate questions and extract only the cor
 
 ## Usage
 
-1. Run project with Live Server.
+Run project with Live Server.
 
 ## Contributing
 
