@@ -1,25 +1,31 @@
 const { Document, Packer, Paragraph, TextRun } = docx;
-const inputField = document.getElementById("input-text");
-const btnStart = document.getElementById("btn-start");
-const btnSwitch = document.getElementById("btn-switch");
+let uniqueKey = "";
+//fuction log array
+function logArray(arr) {
+  arr.forEach((item) => {
+    console.log(item);
+  });
+}
 //process text form input
-function process() {
+export function processDeduplicates(input) {
   try {
-    const text = document.getElementById("input-text").value;
+    const text = input.value;
     let arr = [];
     let nextIsQuestion = false;
     let questionText = "";
     const labelAnswers = ["A.", "B.", "C.", "D."];
     let options = [];
+
     if (text !== "") {
       const lines = text.trim().split("\n");
 
       lines.forEach((line) => {
+        line = line.trim();
         if (line !== "") {
-          line = line.trim();
           if (line.includes("Question")) {
             if (questionText !== "") {
               arr.push({
+                key: uniqueKey + questionText,
                 content: questionText,
                 options: options,
               });
@@ -32,6 +38,7 @@ function process() {
           } else {
             if (labelAnswers.some((label) => line.includes(label))) {
               options.push(line);
+              line.includes("*") ? (uniqueKey = line) : null;
             }
           }
         }
@@ -39,18 +46,38 @@ function process() {
 
       if (questionText !== "") {
         arr.push({
+          key: uniqueKey + questionText,
           content: questionText,
           options: options,
         });
       }
       if (arr.length) {
-        generateDoc(arr);
+        generateDoc(removeDuplicates(arr));
         return;
       }
-      toast("Error", "No question found");
+      toast("Warning", "No question found");
+      input.value = "";
     } else {
       toast("Error", "You must enter questions");
     }
+  } catch (e) {
+    toast("Error", e);
+  }
+}
+//remove duplicate in arr
+function removeDuplicates(arr) {
+  try {
+    let uniqueQuestions = new Set();
+    let uniqueArr = [];
+
+    arr.forEach((question) => {
+      if (!uniqueQuestions.has(question.key)) {
+        uniqueQuestions.add(question.key);
+        uniqueArr.push(question);
+      }
+    });
+
+    return uniqueArr;
   } catch (e) {
     toast("Error", e);
   }
@@ -66,12 +93,6 @@ function generateDoc(arr) {
     const sectionChildren = [];
     let size = 24;
     let font = "Calibri";
-    const questionCount = {};
-
-    arr.forEach((question) => {
-      questionCount[question.content] =
-        (questionCount[question.content] || 0) + 1;
-    });
 
     arr.forEach((question, index) => {
       const labelParagraph = new Paragraph({
@@ -84,14 +105,11 @@ function generateDoc(arr) {
         ],
       });
 
-      const isDuplicate = questionCount[question.content] > 1;
-
       const questionParagraph = new Paragraph({
         children: [
           new TextRun({
             text: question.content,
             bold: true,
-            color: isDuplicate ? "#FF4500" : undefined,
             size: size,
             font: font,
           }),
@@ -133,38 +151,31 @@ function generateDoc(arr) {
     toast("Error", e);
   }
 }
+
 //toast
 let timeoutId;
 function toast(status, content) {
   try {
-    function timeout(option) {
-      if (option === "call") {
-        timeoutId = setTimeout(() => {
-          toastElem.className = `${status.toLowerCase()} animate`;
-        }, 4000);
-      } else {
-        clearTimeout(timeoutId);
-      }
-    }
-
     let icon = null;
-    let toastElem = document.getElementById("toast");
-    toastElem.className = ``;
-    timeout();
+    let toastinput = document.getElementById("toast");
+    toastinput.className = ``;
+    clearTimeout(timeoutId);
     setTimeout(() => {
-      if (status === "successful") {
-        icon =
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>';
+      if (status === "Successful") {
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>`;
+      } else if (status === "Error") {
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>`;
       } else {
-        icon =
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>';
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>`;
       }
-      toastElem.className = `${status.toLowerCase()}`;
-      toastElem.querySelector(".toast-icon").innerHTML = icon;
-      toastElem.querySelector(".toast-title").innerText = status;
-      toastElem.querySelector(".toast-content").innerText = content;
-      timeout("call");
-    }, 1);
+      toastinput.className = `${status.toLowerCase()}`;
+      toastinput.querySelector(".toast-icon").innerHTML = icon;
+      toastinput.querySelector(".toast-title").innerText = status;
+      toastinput.querySelector(".toast-content").innerText = content;
+      timeoutId = setTimeout(() => {
+        toastinput.className = `${status.toLowerCase()} animate`;
+      }, 2400);
+    }, 8);
   } catch (e) {
     alert("Error: " + e);
   }
@@ -191,29 +202,3 @@ function getDateTime(option) {
     }:${seconds < 10 ? "0" + seconds : seconds}`;
   }
 }
-//listener event keydown
-inputField.addEventListener("keydown", (e) => {
-  const control = [
-    "Backspace",
-    "Enter",
-    "ArrowUp",
-    "ArrowRight",
-    "ArrowDown",
-    "ArrowLeft",
-  ];
-  const allowKey = ["c", "v", "a"];
-  if ((e.ctrlKey && allowKey.includes(e.key)) || control.includes(e.key)) {
-    return;
-  }
-  e.preventDefault();
-});
-
-//listener event click
-btnStart.addEventListener("click", () => {
-  process();
-});
-//listener event click
-btnSwitch.addEventListener("click", () => {
-  window.location.href = "../only";
-});
-console.log(getDateTime("date"), getDateTime());

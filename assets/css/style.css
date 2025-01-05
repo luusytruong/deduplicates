@@ -28,6 +28,12 @@
     --size-s: 14px;
     --size-xl: 28px;
     --mw: 320px;
+    --color-primary: #FFFFFF;
+    --color-bgr: #F3F5F6;
+    /* theme dracula */
+    --color-primary-dark: #282A36;
+    --color-bgr-dark: #21222C;
+    --color-text-highlight: #FF79C6;
 }
 
 ::selection {
@@ -50,15 +56,22 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
-    cursor: default;
+    cursor: grab;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #333;
+    cursor: grabbing;
 }
 
 body {
     height: 100svh;
-    background-color: #F3F5F6;
-    background-image: url('./images/sunrise-lake-art-work_1540748195.jpg');
+    background-color: var(--color-bgr);
+    /* background-image: url('./images/sunrise-lake-art-work_1540748195.jpg');
+    background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmI4ZXlkcmJwNm5jazR6dms2OHIxZXpscGt6aTFkb3ZmMGd4cWdzdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xTiTnxpQ3ghPiB2Hp6/giphy.webp'); */
     background-size: cover;
-    /* backdrop-filter: blur(12px); */
+    background-position: center;
+    backdrop-filter: blur(12px);
 }
 
 @keyframes toastShow {
@@ -136,7 +149,7 @@ body {
     align-items: center;
     max-width: var(--mw);
     width: 100%;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--color-primary);
     backdrop-filter: blur(12px);
     padding: var(--padding-s);
     padding-right: var(--padding-l);
@@ -185,7 +198,7 @@ body {
     max-width: var(--mw);
     aspect-ratio: 1;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--color-primary);
     backdrop-filter: blur(12px);
     overflow: hidden;
     transition: all 0.35s;
@@ -208,7 +221,7 @@ h1 {
 
 h1 a {
     font-size: 14px;
-    color: #7A6BFF;
+    color: #7A6BFF !important;
 }
 
 h1,
@@ -224,6 +237,7 @@ a {
     box-shadow: inset 0 0 6px #0000000d;
     border-radius: 6px;
     caret-color: #7A6BFF;
+    background-color: transparent;
 }
 
 /* #input-text {
@@ -269,12 +283,15 @@ a {
     align-items: center;
     border-radius: 0 8px;
 }
-.input-area>button:hover{
+
+.input-area>button:hover {
     opacity: 0.4;
 }
-.input-area>button:active{
+
+.input-area>button:active {
     opacity: 1;
 }
+
 .input-area img {
     user-select: none !important;
     width: 14px;
@@ -291,4 +308,26 @@ a {
 
 .process>div:last-child>button:active {
     background-color: rgb(122, 107, 255, 0.1);
+}
+
+/* dark-theme */
+.dark-theme * {
+    color: #ccc;
+}
+
+.dark-theme {
+    background-color: var(--color-bgr-dark);
+    color: #FF79C6;
+}
+
+.dark-theme .process {
+    background-color: var(--color-primary-dark);
+}
+
+.dark-theme .toast-wrapper {
+    background-color: var(--color-primary-dark);
+}
+
+.dark-theme #input-text {
+    background-color: #3C3D51;
 }
