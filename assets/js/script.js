@@ -1,4 +1,4 @@
-import { processDeduplicates } from "./deduplicates.js";
+import { processDeduplicates, toast } from "./deduplicates.js";
 import { processOnlyCorrect } from "./onlyCorrect.js";
 
 const inputField = document.getElementById("input-text");
@@ -7,6 +7,9 @@ const btnPaste = document.getElementById("btn-paste");
 const btnStart = document.getElementById("btn-start");
 const btnSwitch = document.getElementById("btn-switch");
 let state = 1;
+
+//toast
+let timeoutId;
 
 //listener event click
 btnPaste.addEventListener("click", async () => {

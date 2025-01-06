@@ -164,7 +164,7 @@ function generateDoc(arr) {
 
 //toast
 let timeoutId;
-function toast(status, content) {
+export function toast(status, content) {
   try {
     let icon = null;
     let toastinput = document.getElementById("toast");
