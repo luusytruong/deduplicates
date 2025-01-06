@@ -2,10 +2,13 @@ const { Document, Packer, Paragraph, TextRun } = docx;
 let uniqueKey = "";
 //fuction log array
 function logArray(arr) {
+  console.log(arr.length);
   arr.forEach((item) => {
     console.log(item);
   });
 }
+//clean text
+const cleanedText = (text) => text.replace(/^\*[A-D]\.\s*/, "");
 //process text form input
 export function processDeduplicates(input) {
   try {
@@ -38,7 +41,9 @@ export function processDeduplicates(input) {
           } else {
             if (labelAnswers.some((label) => line.includes(label))) {
               options.push(line);
-              line.includes("*") ? (uniqueKey = line) : null;
+              line.includes("*")
+                ? (uniqueKey = cleanedText(line).toLowerCase())
+                : null;
             }
           }
         }
@@ -52,7 +57,12 @@ export function processDeduplicates(input) {
         });
       }
       if (arr.length) {
-        generateDoc(removeDuplicates(arr));
+        const finalArr = removeDuplicates(arr);
+        console.log("before", arr.length);
+        // logArray(arr);
+        console.log("after", finalArr.length);
+        // logArray(finalArr);
+        generateDoc(finalArr);
         return;
       }
       toast("Warning", "No question found");
@@ -92,7 +102,7 @@ function generateDoc(arr) {
 
     const sectionChildren = [];
     let size = 24;
-    let font = "Calibri";
+    let font = "Times New Roman";
 
     arr.forEach((question, index) => {
       const labelParagraph = new Paragraph({
@@ -145,7 +155,7 @@ function generateDoc(arr) {
         blob,
         `questions-${getDateTime("date") + "_" + getDateTime()}.docx`
       );
-      toast("Successful", "File is downloading");
+      toast("Successful", `File with ${arr.length} questions is downloading`);
     });
   } catch (e) {
     toast("Error", e);
