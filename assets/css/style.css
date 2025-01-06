@@ -6,7 +6,7 @@
     box-sizing: border-box;
     list-style: none;
     line-height: 1.5;
-    color: #333;
+    color: var(--color-text);
     font-size: 12px;
     font-family: 'Inter';
     font-weight: normal;
@@ -28,12 +28,12 @@
     --size-s: 14px;
     --size-xl: 28px;
     --mw: 320px;
+
+    --color-background: #F3F5F6;
+    --color-input: #FAFAFA;
     --color-primary: #FFFFFF;
-    --color-bgr: #F3F5F6;
-    /* theme dracula */
-    --color-primary-dark: #282A36;
-    --color-bgr-dark: #21222C;
-    --color-text-highlight: #FF79C6;
+
+    --color-text: #333;
 }
 
 ::selection {
@@ -66,7 +66,7 @@
 
 body {
     height: 100svh;
-    background-color: var(--color-bgr);
+    background-color: var(--color-background);
     /* background-image: url('./images/sunrise-lake-art-work_1540748195.jpg');
     background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmI4ZXlkcmJwNm5jazR6dms2OHIxZXpscGt6aTFkb3ZmMGd4cWdzdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xTiTnxpQ3ghPiB2Hp6/giphy.webp'); */
     background-size: cover;
@@ -202,7 +202,6 @@ body {
     backdrop-filter: blur(12px);
     overflow: hidden;
     transition: all 0.35s;
-    /* box-shadow: 0 0 40px #00000010; */
 }
 
 .process>* {
@@ -234,20 +233,12 @@ a {
     padding: 6px;
     resize: none;
     border: 0;
-    box-shadow: inset 0 0 6px #0000000d;
+    /* box-shadow: inset 0 0 6px #0000000d; */
+    /* border: 1px solid var(--color-input); */
     border-radius: 6px;
     caret-color: #7A6BFF;
-    background-color: transparent;
+    background-color: var(--color-input);
 }
-
-/* #input-text {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-#input-text::-webkit-scrollbar {
-    display: none;
-} */
 
 .process>div {
     display: flex;
@@ -311,28 +302,19 @@ a {
 }
 
 /* dark-theme */
-.dark-theme * {
-    color: #ccc;
+@media(prefers-color-scheme: dark) {
+    :root {
+        /* theme dracula */
+        --color-background: #282A36;
+        --color-input: #313341;
+        --color-primary: #343746;
+
+        --color-text: #CCC;
+    }
 }
 
-.dark-theme {
-    background-color: var(--color-bgr-dark);
-    color: #FF79C6;
-}
-
-.dark-theme .process {
-    background-color: var(--color-primary-dark);
-}
-
-.dark-theme .toast-wrapper {
-    background-color: var(--color-primary-dark);
-}
-
-.dark-theme #input-text {
-    background-color: #3C3D51;
-}
 @media (max-width: 768px) {
-    *{
+    * {
         font-size: 16px !important;
     }
 }

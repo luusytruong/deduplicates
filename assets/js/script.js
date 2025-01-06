@@ -8,15 +8,6 @@ const btnStart = document.getElementById("btn-start");
 const btnSwitch = document.getElementById("btn-switch");
 let state = 1;
 
-//theme
-const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-
-if (prefersDarkScheme.matches) {
-  document.body.classList.toggle("dark-theme");
-} else {
-  document.body.classList.toggle("light-theme");
-}
-
 //listener event click
 btnPaste.addEventListener("click", async () => {
   const copyText = (await navigator.clipboard.readText()).trim();
