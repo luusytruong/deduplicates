@@ -2,9 +2,9 @@ import { toast } from "./deduplicates.js";
 
 function cleanString(input) {
   return input
-    .replace(/\*[A-D]\.\s*/g, "")
+    .replace(/\*?[A-D]\.\s*/g, "")
     .replace(/[^\x00-\x7F]/g, "")
-    .replace(/[.,;:{}[\]()]/g, "")
+    .replace(/[.,;:{}[\]()?""]/g, "")
     .replace(/\s+/g, "")
     .toLowerCase()
     .trim();
@@ -14,8 +14,8 @@ let timeoutId;
 export function processOnlyCorrect(input) {
   try {
     const text = input.value;
-    let correctAnswer = [];
-    let questionContent = "";
+    let cAnswer = [];
+    let qContent = "";
     let next = false;
 
     if (text !== "") {
@@ -25,24 +25,24 @@ export function processOnlyCorrect(input) {
           if (line.includes("Question")) {
             next = true;
           } else if (next === true) {
-            questionContent = line;
+            qContent = line;
             next = false;
           } else if (line.includes("*")) {
-            correctAnswer.push(cleanString(questionContent + line));
+            cAnswer.push(cleanString(qContent + line));
           }
         }
       });
-      if (correctAnswer.length) {
-        console.log(correctAnswer);
+      if (cAnswer.length) {
+        console.log(cAnswer);
 
-        const jsonArr = JSON.stringify(correctAnswer, null, 2);
+        const jsonArr = JSON.stringify(cAnswer, null, 2);
 
         navigator.clipboard
           .writeText(jsonArr)
           .then(() => {
             toast(
               "Successful",
-              `${correctAnswer.length} Answers copied to clipboard`
+              `${cAnswer.length} Answers copied to clipboard`
             );
           })
           .catch((err) => {

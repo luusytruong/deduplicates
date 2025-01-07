@@ -2,67 +2,88 @@ const { Document, Packer, Paragraph, TextRun } = docx;
 let uniqueKey = "";
 //fuction log array
 function logArray(arr) {
-  console.log(arr.length);
   arr.forEach((item) => {
     console.log(item);
   });
 }
+
 //clean text
-const cleanedText = (text) => text.replace(/^\*[A-D]\.\s*/, "");
+function cleanString(input) {
+  return input
+    .replace(/\*?[A-D]\.\s*/g, "")
+    .replace(/[^\x00-\x7F]/g, "")
+    .replace(/[.,;:{}[\]()?""]/g, "")
+    .replace(/\s+/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+//generate unique key
+function generateUniqueKey(qContent, qOption) {
+  let formatArray = [];
+  qOption.forEach((op) => {
+    formatArray.push(cleanString(op));
+  });
+  const optionStr = formatArray.slice().sort();
+  return cleanString(qContent + optionStr);
+}
+
 //process text form input
 export function processDeduplicates(input) {
   try {
     const text = input.value;
-    let arr = [];
-    let nextIsQuestion = false;
-    let questionText = "";
+    let rawArray = [];
+    let next = false;
+    let qContent = "";
     const labelAnswers = ["A.", "B.", "C.", "D."];
-    let options = [];
+    let qOption = [];
 
     if (text !== "") {
       const lines = text.trim().split("\n");
-
       lines.forEach((line) => {
         line = line.trim();
         if (line !== "") {
           if (line.includes("Question")) {
-            if (questionText !== "") {
-              arr.push({
-                key: uniqueKey + questionText,
-                content: questionText,
-                options: options,
+            if (qContent !== "") {
+              rawArray.push({
+                key: generateUniqueKey(qContent, qOption),
+                content: qContent,
+                options: qOption,
               });
-              options = [];
+              qOption = [];
             }
-            nextIsQuestion = true;
-          } else if (nextIsQuestion) {
-            nextIsQuestion = false;
-            questionText = line;
+            next = true;
+          } else if (next === true) {
+            next = false;
+            qContent = line;
           } else {
             if (labelAnswers.some((label) => line.includes(label))) {
-              options.push(line);
-              line.includes("*")
-                ? (uniqueKey = cleanedText(line).toLowerCase())
-                : null;
+              qOption.push(line);
             }
           }
         }
       });
 
-      if (questionText !== "") {
-        arr.push({
-          key: uniqueKey + questionText,
-          content: questionText,
-          options: options,
+      if (qContent !== "") {
+        rawArray.push({
+          key: generateUniqueKey(qContent, qOption),
+          content: qContent,
+          options: qOption,
         });
       }
-      if (arr.length) {
-        const finalArr = removeDuplicates(arr);
-        console.log("before", arr.length);
-        // logArray(arr);
-        console.log("after", finalArr.length);
-        // logArray(finalArr);
-        generateDoc(finalArr);
+      if (rawArray.length) {
+        const finalArray = removeDuplicates(rawArray);
+        console.log(
+          "%cbefore " + rawArray.length,
+          "color: #00EE00; font-size: 40px;"
+        );
+        // logArray(rawArray);
+        console.log(
+          "%cafter " + finalArray.length,
+          "color: #00EE00; font-size: 40px;"
+        );
+        // logArray(finalArray);
+        generateDoc(finalArray);
         return;
       }
       toast("Warning", "No question found");
@@ -77,17 +98,17 @@ export function processDeduplicates(input) {
 //remove duplicate in arr
 function removeDuplicates(arr) {
   try {
-    let uniqueQuestions = new Set();
-    let uniqueArr = [];
+    let uQuestion = new Set();
+    let uArray = [];
 
     arr.forEach((question) => {
-      if (!uniqueQuestions.has(question.key)) {
-        uniqueQuestions.add(question.key);
-        uniqueArr.push(question);
+      if (!uQuestion.has(question.key)) {
+        uQuestion.add(question.key);
+        uArray.push(question);
       }
     });
 
-    return uniqueArr;
+    return uArray;
   } catch (e) {
     toast("Error", e);
   }
@@ -184,7 +205,7 @@ export function toast(status, content) {
       toastinput.querySelector(".toast-content").innerText = content;
       timeoutId = setTimeout(() => {
         toastinput.className = `${status.toLowerCase()} animate`;
-      }, 2400);
+      }, 3200);
     }, 8);
   } catch (e) {
     alert("Error: " + e);
